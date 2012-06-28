@@ -338,6 +338,9 @@ class Forma {
     /*
      * Submit
      * Return submit buttons
+     * @param Mixed Array/string buttons
+     * 	@arg Each button
+     * @param Mixed Array/string extra attributes
      */
     public function submit($buttons, $extra = '')
     {
@@ -657,7 +660,6 @@ class Forma {
 
     private function _submit_buttons($buttons)
     {
-	//#TODO If we have no buttons, we only add SEND or OK?
 	//#TODO Support Extra Attributes For buttons
 
 	$set = '';
@@ -670,12 +672,13 @@ class Forma {
 		if (substr($val, 0, 4) == 'uri:')
 		{
 		    $val = substr($val, 4);
-		    $text = ($this->setting('translate')) ? $this->_lang($key, 'submit') : $val;
-		    $set .= anchor('admin/' . $val, $text);
+		    $text = ($this->setting('translate')) ? $this->_lang($key) : $val;
+		    $set .= anchor($val, $text);
 		}
 		else
 		{
-		    $val = ($this->setting('translate')) ? $this->_lang($key, 'submit') : $val;
+		    $val = ($this->setting('translate')) ? $this->_lang($key) : $val;
+
 		    $set .= form_submit('submit', $val);
 		}
 	    }
