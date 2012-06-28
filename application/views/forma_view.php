@@ -13,6 +13,8 @@ echo $this->forma->open($forma['attr'], '', $forma['settings']);
     
 //    $this->forma->add_input_values(array('modulo' => $modulo->id, 'formato' => ($formato_id) ? $formato_id : 1)); //#TODO Hacer dinámico el formato, y primero que sea visible el valor
 
+echo $this->forma->fieldset('name');
+
 //Agregamos los campo
     foreach($forma['fields'] AS $name => $field)
     {
@@ -26,6 +28,10 @@ echo $this->forma->open($forma['attr'], '', $forma['settings']);
             );
     }
 
+    echo $this->forma->fieldset_close();
+
+    echo $this->forma->submit(array('submit'));
+    
     echo $this->forma->close();
 
     echo $this->forma->show_errors();
