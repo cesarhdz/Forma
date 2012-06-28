@@ -14,14 +14,18 @@ $config['forma_defaults'] = array(
     //Main Settings
     'default_settings' => array(
 	'error_level' => 2, //0 means no error, 1 global error, 2 per field error
-	'translate' => true,
+	'translate' => false,
 	'lang_prefix' => '', //Main prefix if translate is true
 	'data_list_delimiter' => ',',
 	'attr_allowed' => 'class|style|title|autofocus',
 	
+	/*
+	 * Cols that can be retrive from db
+	 * to fill dropdowns or multioptions fields
+	 */
 	'allowed_cols' => array(
-	    'etiquetas' => array('etiqueta'),
-	    'formatos' => array('formato'),
+		//e.g.
+	    //'table' => array('col1', 'col2'),
 	),
 	
 	//Holds token name and values, for cached files than can be served with current csrf values
@@ -230,4 +234,4 @@ $config['forma_defaults']['fields'] = array(
 	),
     )
 );
-/* termina config/ceverla/forma/defaults.php */
+/* ends config/ceverla/forma/defaults.php */
