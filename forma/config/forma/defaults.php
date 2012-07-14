@@ -13,7 +13,7 @@ $config['forma_defaults'] = array(
     
     //Main Settings
     'default_settings' => array(
-	'error_level' => 2, //0 means no error, 1 global error, 2 per field error
+	'error_level' => 2, //0 means no error, 1 global error, 2 field basis error
 	'translate' => false,
 	'lang_prefix' => '', //Main prefix if translate is true
 	'data_list_delimiter' => ',',
@@ -42,12 +42,13 @@ $config['forma_defaults'] = array(
 	'fieldset' => array(
 	    'tag' => '',
 	    'extra' => array(
-		'before_fields' => '',
-		'after_fields' => '' 
+		'before_fields' => '<dl>',
+		'after_fields' => '</dl>' 
 	    ),
 	),
 	'field'	    => array(
-	    'tag' => 'dl', //Without class
+            //@Check field tag parsing, bacause div.field is invalid
+	    'tag' => 'div.field', 
 	    'input_tag' => 'dd',
 	    'label_tag' => 'dt',
 	    'error_tag' => 'dt.error',
