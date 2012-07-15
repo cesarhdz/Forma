@@ -20,7 +20,7 @@
  * @date 2th december 2011
  */
 
-class Forma {
+class Forma extends CI_Model{
 
     //Store elements for proccessing
     protected $_form, $_fieldset, $_field, $_option, $_submit, $_rules;
@@ -34,29 +34,23 @@ class Forma {
     //Store the main configurable settings
     private $settings = array();
     
-    //Theme, stores the templates and more
-    private $_CI;
-    
     //To fix the form validation bug
     private $_fields_in_post = array();
 
     /*
      * Constructor
-     * @param array Settings
      */
-    public function __construct($settings = array())
+    public function __construct()
     {
-	$this->_CI = & get_instance();
-
 	//Load CI form helper
-	$this->_CI->load->helper(array('form', 'language', 'url'));
+	$this->load->helper(array('form', 'language', 'url'));
 
 	//Load Lang
-	$this->_CI->lang->load('forma');
+	$this->lang->load('forma');
 
 	//Load form config options, form default's file and add to the object
-	$this->_CI->config->load("forma/defaults");
-	foreach ($this->_CI->config->item("forma_defaults") as $key => $val)
+	$this->config->load("forma/defaults");
+	foreach ($this->config->item("forma_defaults") as $key => $val)
 	{
 	    $key = '_' . $key;
 	    $this->$key = $val;
@@ -187,7 +181,7 @@ class Forma {
 
 	//Almost the same way form_open function figures action attribute out, so if action is empty we set to the current uri
 	$action = base_url();
-	$action .= ($form['action']) ?  $form['action'] : $this->_CI->uri->uri_string();
+	$action .= ($form['action']) ?  $form['action'] : $this->uri->uri_string();
 
 	//Method and accept-charset are set
 	$attr = array(
@@ -411,13 +405,13 @@ class Forma {
 	if (count($rules) AND is_array($rules))
 	{
 	    //Load validation class
-	    $this->_CI->load->library('form_validation');
+	    $this->load->library('form_validation');
 
 	    //Set the rules in validation Object
-	    $this->_CI->form_validation->set_rules($this->_rules);
+	    $this->form_validation->set_rules($this->_rules);
 
 	    //We have everything we need to run validation
-	    return $this->_CI->form_validation->run();
+	    return $this->form_validation->run();
 	    
 	    //@deprecated Because I think set_values function have a bug: if we don't set the rules we have no answer 
 	    //i try to fix it, if fix_bug is set to true
@@ -462,7 +456,7 @@ class Forma {
 	//Return If we have no rules but before we try to fix a bug in set_values function from form validation
 	if ($rules == FALSE)
 	{
-	    if ($this->_field['name'] AND $post = & $this->_CI->input->post($this->_field['name']))
+	    if ($this->_field['name'] AND $post = & $this->input->post($this->_field['name']))
 		$this->_fields_in_post[$field['name']] = & $post;
 
 	    return;
@@ -514,7 +508,7 @@ class Forma {
 	//Then if we have name and POST, we look for error
 	if (count($_POST) && $this->setting('error_level'))
 	{
-	    if ($this->_CI->form_validation->_field_data[$this->_field['name']]['error'] != '')
+	    if ($this->form_validation->_field_data[$this->_field['name']]['error'] != '')
 		$class .= ' error';
 	}
 
@@ -772,11 +766,11 @@ class Forma {
 	$inputs = (is_array($hidden)) ? $hidden : array();
 	
 	// Look for CSRF
-	if ($this->_CI->config->item('csrf_protection') === TRUE)
+	if ($this->config->item('csrf_protection') === TRUE)
 	{
 	    //This is the original way CI handles CSRF
 	    if (!$this->setting('csrf_parse'))
-		$inputs[$this->_CI->security->get_csrf_token_name()] = $this->_CI->security->get_csrf_hash();
+		$inputs[$this->security->get_csrf_token_name()] = $this->security->get_csrf_hash();
 
 	    //But if we cache files, we only need to provide the template tags to be parsed by a custom Loader Controller
 	    else
@@ -1228,7 +1222,7 @@ class Forma {
     function _fix_set_values_bug()
     {
 	foreach ($this->_fields_in_post as $name)
-	    $this->_CI->form_validation->_field_data[$name] = array('field' => $name, 'postdata' => $this->_CI->input->post($name));
+	    $this->form_validation->_field_data[$name] = array('field' => $name, 'postdata' => $this->input->post($name));
     }
 
     /*
@@ -1254,7 +1248,7 @@ class Forma {
 	    $sql = "SELECT `{$col[1]}`, id FROM {$col[0]}";
 	    $sql .= ( is_string($col[2]) AND $col[2]) ? " WHERE $col[2] ;" : ';';
 
-	    $q = $this->_CI->db->query($sql);
+	    $q = $this->db->query($sql);
 
 	    //Format results
 	    $list = array();
